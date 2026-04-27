@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DND小队匿名论坛</title>
     <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <header class="header">
@@ -13,17 +14,6 @@
     </header>
 
     <main class="container">
-      <section class="card">
-        <h2>云端连接设置（仅首次）</h2>
-        <label for="supabase-url">Supabase Project URL</label>
-        <input id="supabase-url" type="text" placeholder="https://xxxx.supabase.co" />
-
-        <label for="supabase-anon-key">Supabase anon key</label>
-        <input id="supabase-anon-key" type="text" placeholder="eyJ..." />
-
-        <button id="save-supabase-btn" type="button">保存并连接云端</button>
-        <p id="connection-status" class="status-text">尚未连接云端</p>
-      </section>
 
       <section class="card">
         <h2>发布冒险情报</h2>
@@ -36,14 +26,7 @@
           <input id="post-title" name="title" type="text" maxlength="80" placeholder="例如：龙巢密道已发现" required />
 
           <label for="post-content">情报正文</label>
-          <textarea
-            id="post-content"
-            name="content"
-            rows="5"
-            maxlength="1000"
-            placeholder="写下你的见闻、战报或委托..."
-            required
-          ></textarea>
+          <textarea id="post-content" name="content" rows="5" maxlength="1000" placeholder="写下你的见闻、战报或委托..." required></textarea>
           <p class="empty">每次投递卷轴都会自动掷一次 d20 并记录结果。</p>
 
           <button type="submit">投递卷轴（自动掷 d20）</button>
