@@ -8,14 +8,30 @@
   </head>
   <body>
     <header class="header">
-      <h1>⚔️ DND小队匿名论坛 ⚔️</h1>
+      <h1>DND小队匿名论坛</h1>
       <p>营火旁的耳语、地城中的密谋、酒馆里的传闻</p>
     </header>
 
     <main class="container">
       <section class="card">
+        <h2>云端连接设置（仅首次）</h2>
+        <label for="supabase-url">Supabase Project URL</label>
+        <input id="supabase-url" type="text" placeholder="https://xxxx.supabase.co" />
+
+        <label for="supabase-anon-key">Supabase anon key</label>
+        <input id="supabase-anon-key" type="text" placeholder="eyJ..." />
+
+        <button id="save-supabase-btn" type="button">保存并连接云端</button>
+        <p id="connection-status" class="status-text">尚未连接云端</p>
+      </section>
+
+      <section class="card">
         <h2>发布冒险情报</h2>
         <form id="post-form">
+          <label for="identity-select">你的匿名身份</label>
+          <select id="identity-select" name="identity"></select>
+          <input id="custom-identity" type="text" maxlength="20" placeholder="输入你的自定义身份名（如：银月游侠）" class="hidden" />
+
           <label for="post-title">情报标题</label>
           <input id="post-title" name="title" type="text" maxlength="80" placeholder="例如：龙巢密道已发现" required />
 
@@ -39,7 +55,27 @@
           <h2>酒馆告示板</h2>
           <input id="search-input" type="search" placeholder="搜索情报标题或正文..." />
         </div>
+
+        <div class="toolbar">
+          <label for="sort-select">排序</label>
+          <select id="sort-select">
+            <option value="latest">最新</option>
+            <option value="hot">热门</option>
+          </select>
+        </div>
+
         <div id="posts-container" class="posts"></div>
+
+        <div class="pager">
+          <button id="prev-page-btn" type="button">上一页</button>
+          <span id="page-info">第 1 页</span>
+          <button id="next-page-btn" type="button">下一页</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>今日悬赏热榜</h2>
+        <ol id="daily-ranking" class="ranking-list"></ol>
       </section>
     </main>
 
@@ -65,6 +101,7 @@
       </article>
     </template>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./script.js"></script>
   </body>
 </html>
