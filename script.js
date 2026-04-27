@@ -282,3 +282,48 @@ function initRealtime() {
     .on("postgres_changes", { event: "*", schema: "public", table: "replies" }, () => refreshPosts())
     .subscribe();
 }
+
+/** 每日榜单 */
+async function refreshRanking() {
+  const { data } = await supabaseClient
+    .from("posts")
+    .select("title, likes")
+    .order("likes", { ascending: false })
+    .limit(5);
+
+  rankingList.innerHTML = "";
+  (data || []).forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `${item.title} (🔥 ${item.likes})`;
+    rankingList.appendChild(li);
+  });
+}
+
+function resolveAlias(entity) {
+  return (entity.alias || "").trim() || "匿名冒险者";
+}
+
+function formatTime(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString();
+}
+
+function rollD20() { return Math.floor(Math.random() * 20) + 1; }
+
+function getDiceResult(post) {
+  if (post.dice_result) return post.dice_result;
+  const m = post.content.match(/d20）：(\d+)/);
+  return m ? parseInt(m[1]) : null;
+}
+
+function createDiceBadge(val) {
+  const div = document.createElement("div");
+  div.className = "dice-badge";
+  if (val === 20) { div.classList.add("dice-badge-success"); div.textContent = "✨ 大成功! d20=20"; }
+  else if (val === 1) { div.classList.add("dice-badge-fail"); div.textContent = "☠ 大失败! d20=1"; }
+  else { div.textContent = `🎲 d20=${val}`; }
+  return div;
+}
+
+// 启动！
+init();
