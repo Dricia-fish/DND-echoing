@@ -1,0 +1,70 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DND小队匿名论坛</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>⚔️ DND小队匿名论坛 ⚔️</h1>
+      <p>营火旁的耳语、地城中的密谋、酒馆里的传闻</p>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>发布冒险情报</h2>
+        <form id="post-form">
+          <label for="post-title">情报标题</label>
+          <input id="post-title" name="title" type="text" maxlength="80" placeholder="例如：龙巢密道已发现" required />
+
+          <label for="post-content">情报正文</label>
+          <textarea
+            id="post-content"
+            name="content"
+            rows="5"
+            maxlength="1000"
+            placeholder="写下你的见闻、战报或委托..."
+            required
+          ></textarea>
+          <p class="empty">每次投递卷轴都会自动掷一次 d20 并记录结果。</p>
+
+          <button type="submit">投递卷轴（自动掷 d20）</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="list-head">
+          <h2>酒馆告示板</h2>
+          <input id="search-input" type="search" placeholder="搜索情报标题或正文..." />
+        </div>
+        <div id="posts-container" class="posts"></div>
+      </section>
+    </main>
+
+    <template id="post-template">
+      <article class="post">
+        <div class="post-top">
+          <h3 class="post-title"></h3>
+          <span class="post-time"></span>
+        </div>
+        <p class="post-content"></p>
+        <div class="post-actions">
+          <button class="like-btn" type="button">🔥 0</button>
+          <button class="toggle-reply-btn" type="button">接取任务</button>
+          <button class="delete-btn danger" type="button">焚毁告示</button>
+        </div>
+
+        <div class="reply-box hidden">
+          <textarea class="reply-input" rows="3" maxlength="300" placeholder="留下你的战术或情报..."></textarea>
+          <button class="submit-reply-btn" type="button">刻入留言石板</button>
+        </div>
+
+        <ul class="reply-list"></ul>
+      </article>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
