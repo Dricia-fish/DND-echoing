@@ -21,10 +21,7 @@ function initControls() {
             refreshPosts();
         };
     });
-    document.getElementById("sort-select").onchange = (e) => {
-        currentSort = e.target.value;
-        refreshPosts();
-    };
+    document.getElementById("sort-select").onchange = (e) => { currentSort = e.target.value; refreshPosts(); };
 }
 
 async function refreshPosts() {
@@ -51,10 +48,10 @@ function renderPosts(posts) {
         el.querySelector(".post-content").textContent = post.content;
         el.querySelector(".count").textContent = post.likes || 0;
 
-        // --- 全员删除按钮逻辑 ---
+        // --- 全员删除逻辑 ---
         const delBtn = el.querySelector(".delete-btn");
         delBtn.onclick = async () => {
-            if(confirm("确定要焚毁这份情报吗？")) {
+            if(confirm("确定焚毁这份告示吗？")) {
                 const { error } = await supabaseClient.from("posts").delete().eq("id", post.id);
                 if(error) alert("删除失败：" + error.message);
                 refreshPosts();
@@ -63,23 +60,23 @@ function renderPosts(posts) {
 
         // 回复渲染
         const replyList = el.querySelector(".replies-container");
+        const replyBox = el.querySelector(".reply-box");
+        const replyInput = el.querySelector(".reply-input");
+
         (post.replies || []).forEach(reply => {
             const rDiv = document.createElement("div");
             rDiv.className = "reply-item";
-            rDiv.innerHTML = `
-                <strong>${reply.alias}</strong>: ${reply.content}
-                <button class="del-reply" style="color:#ff6b6b; float:right; background:none; border:none; cursor:pointer;">撤回</button>
-            `;
-            rDiv.querySelector(".del-reply").onclick = async () => {
-                await supabaseClient.from("replies").delete().eq("id", reply.id);
-                refreshPosts();
+            rDiv.innerHTML = `<strong>${reply.alias}</strong>: ${reply.content} <button class="del-reply" style="color:red; float:right; background:none; border:none; cursor:pointer;">撤回</button>`;
+            
+            rDiv.querySelector(".del-reply").onclick = async () => { 
+                await supabaseClient.from("replies").delete().eq("id", reply.id); 
+                refreshPosts(); 
             };
             replyList.appendChild(rDiv);
         });
 
-        // 交互逻辑
-        el.querySelector(".toggle-reply-btn").onclick = () => el.querySelector(".reply-box").classList.toggle("hidden");
-        el.querySelector(".submit-reply-btn").onclick = () => handleReply(post.id, el.querySelector(".reply-input").value);
+        el.querySelector(".toggle-reply-btn").onclick = () => replyBox.classList.toggle("hidden");
+        el.querySelector(".submit-reply-btn").onclick = () => handleReply(post.id, replyInput.value);
         el.querySelector(".like-btn").onclick = async () => {
             await supabaseClient.from("posts").update({ likes: (post.likes || 0) + 1 }).eq("id", post.id);
             refreshPosts();
@@ -94,13 +91,12 @@ async function handleReply(postId, content) {
     const { data: { user } } = await supabaseClient.auth.getUser();
     let alias = document.getElementById("identity-select").value;
     if (alias === "__custom__") alias = document.getElementById("custom-identity").value || "匿名者";
-
     await supabaseClient.from("replies").insert({ post_id: postId, content, alias, owner_id: user?.id });
     refreshPosts();
 }
 
 function initIdentity() {
-    const roles = ["匿名游侠", "匿名法师", "匿名战士", "匿名牧师", "匿名吟游诗人", "__custom__"];
+    const roles = ["匿名游侠", "匿名法师", "匿名战士", "匿名牧师", "__custom__"];
     const sel = document.getElementById("identity-select");
     sel.innerHTML = roles.map(r => `<option value="${r}">${r==='__custom__'?'✨ 自定义...':r}</option>`).join("");
     sel.onchange = () => document.getElementById("custom-identity").classList.toggle("hidden", sel.value !== "__custom__");
@@ -115,7 +111,8 @@ document.getElementById("post-form").onsubmit = async (e) => {
     await supabaseClient.from("posts").insert({ 
         title: document.getElementById("post-title").value,
         content: document.getElementById("post-content").value,
-        alias, board: currentBoard, owner_id: user?.id
+        alias, board: currentBoard, owner_id: user?.id,
+        dice_result: Math.floor(Math.random()*20)+1 
     });
     location.reload();
 };

@@ -5,40 +5,32 @@
   --text-color: #f3e7d3;
   --accent-color: #f6d8a8;
   --danger: #b13a3a;
-  --primary: #a5672b;
 }
 
-body { margin: 0; background: var(--bg-color); color: var(--text-color); font-family: "Segoe UI", sans-serif; line-height: 1.6; }
+body { margin: 0; background: var(--bg-color); color: var(--text-color); font-family: sans-serif; line-height: 1.6; }
 .header { background: #2f1b12; padding: 40px; text-align: center; border-bottom: 3px solid #c8a46a; }
-.container { width: min(1100px, 94%); margin: 40px auto; }
+.container { width: min(1050px, 95%); margin: 30px auto; }
 
-.main-layout { display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start; }
-.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.main-layout { display: grid; grid-template-columns: 1fr 300px; gap: 30px; }
+.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; margin-bottom: 20px; }
 
-.form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+/* 控制栏布局 */
+.board-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.sort-group { width: 150px; } /* 限制下拉框宽度，解决图片中的问题 */
+
+.form-row { display: flex; gap: 15px; margin-bottom: 10px; }
 .form-group { flex: 1; }
-input, textarea, select { width: 100%; padding: 12px; background: #1a1512; color: #fff; border: 1px solid var(--border-color); border-radius: 6px; }
+input, textarea, select { width: 100%; padding: 10px; background: #1a1512; color: #fff; border: 1px solid var(--border-color); border-radius: 6px; }
 
-/* 控制栏 */
-.board-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-.board-tabs { display: flex; gap: 10px; }
-.sort-group { width: 160px; }
-.tab-btn { padding: 10px 20px; cursor: pointer; background: #332a24; border: none; color: #aaa; border-radius: 6px; }
+.tab-btn { padding: 8px 16px; cursor: pointer; background: #332a24; border: none; color: #aaa; border-radius: 4px; }
 .tab-btn.active { background: var(--border-color); color: #fff; }
 
-/* 按钮 */
-button { cursor: pointer; border: none; border-radius: 6px; padding: 10px 18px; font-weight: bold; transition: 0.2s; }
-.primary-btn { background: var(--primary); color: #fff; width: 100%; }
-.danger { background: var(--danger); color: #fff; display: inline-block !important; } /* 强制显示删除按钮 */
+.post-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+button { cursor: pointer; border-radius: 6px; border: none; padding: 8px 15px; font-weight: bold; }
+.primary-btn { background: #a5672b; color: #fff; width: 100%; }
+.danger { background: var(--danger); color: #fff; display: inline-block !important; } /* 确保删除按钮始终显示 */
+
+.reply-item { background: rgba(0,0,0,0.2); padding: 10px; margin-top: 8px; border-radius: 8px; }
 .hidden { display: none !important; }
-
-/* 帖子样式 */
-.post-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
-.post-title { color: var(--accent-color); margin: 0; }
-.post-actions { display: flex; gap: 15px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-
-.reply-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 0.95em; border-left: 3px solid var(--border-color); }
-.ranking-list { padding-left: 20px; }
-.ranking-list li { margin-bottom: 10px; }
 
 @media (max-width: 800px) { .main-layout { grid-template-columns: 1fr; } }
