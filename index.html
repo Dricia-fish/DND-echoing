@@ -14,90 +14,73 @@
     </header>
 
     <main class="container">
-        <section class="card">
-            <h2>发布冒险情报</h2>
-            <form id="post-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="board-select">发布板块</label>
-                        <select id="board-select">
-                            <option value="quests">📜 委托悬赏</option>
-                            <option value="lounge">🍺 酒馆闲聊</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="identity-select">你的身份</label>
-                        <select id="identity-select"></select>
-                    </div>
-                </div>
-                
-                <input id="custom-identity" type="text" placeholder="输入你的自定义身份名（如：银月游侠）" class="hidden" />
-
-                <label for="post-title">情报标题</label>
-                <input id="post-title" type="text" maxlength="80" placeholder="例如：龙巢密道已发现" required />
-
-                <label for="post-content">情报正文</label>
-                <textarea id="post-content" rows="4" maxlength="1000" placeholder="写下你的见闻、战报或委托..." required></textarea>
-                
-                <p class="helper-text">每次投递都会自动掷一次 d20 以决定你的运气。</p>
-                <button type="submit" class="primary-btn">投递卷轴</button>
-            </form>
-        </section>
-
-        <div class="board-controls">
-            <div class="board-tabs">
-                <button class="tab-btn active" data-board="quests">📜 委托</button>
-                <button class="tab-btn" data-board="lounge">🍺 闲聊</button>
-            </div>
-            <div class="search-sort-group">
-                <input id="search-input" type="search" placeholder="搜索情报..." />
-                <select id="sort-select">
-                    <option value="latest">最新发布</option>
-                    <option value="hot">热门推荐</option>
-                </select>
-            </div>
-        </div>
-
         <div class="main-layout">
             <div class="content-area">
-                <div id="posts-container" class="posts"></div>
-                
-                <div class="pager">
-                    <button id="prev-page-btn">上一页</button>
-                    <span id="page-info">第 1 页</span>
-                    <button id="next-page-btn">下一页</button>
+                <section class="card">
+                    <h2>📜 发布冒险情报</h2>
+                    <form id="post-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>发布板块</label>
+                                <select id="board-select">
+                                    <option value="quests">📜 委托悬赏</option>
+                                    <option value="lounge">🍺 酒馆闲聊</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>你的身份</label>
+                                <select id="identity-select"></select>
+                            </div>
+                        </div>
+                        <input id="custom-identity" type="text" placeholder="输入自定义身份名..." class="hidden" />
+                        <input id="post-title" type="text" placeholder="情报标题..." required />
+                        <textarea id="post-content" rows="4" placeholder="写下你的见闻..." required></textarea>
+                        <button type="submit" class="primary-btn">投递卷轴 (掷 d20)</button>
+                    </form>
+                </section>
+
+                <div class="board-controls">
+                    <div class="board-tabs">
+                        <button class="tab-btn active" data-board="quests">📜 委托</button>
+                        <button class="tab-btn" data-board="lounge">🍺 闲聊</button>
+                    </div>
+                    <div class="sort-group">
+                        <select id="sort-select">
+                            <option value="latest">最新发布</option>
+                            <option value="hot">热门推荐</option>
+                        </select>
+                    </div>
                 </div>
+
+                <div id="posts-container" class="posts"></div>
             </div>
 
             <aside class="sidebar">
-                <div class="card ranking-card">
+                <div class="card">
                     <h3>🏆 今日悬赏热榜</h3>
-                    <ol id="daily-ranking" class="ranking-list"></ol>
+                    <ol id="daily-ranking"></ol>
                 </div>
             </aside>
         </div>
     </main>
 
     <template id="post-template">
-        <article class="post">
+        <article class="post card">
             <div class="post-top">
                 <h3 class="post-title"></h3>
                 <span class="post-time"></span>
             </div>
             <p class="post-content"></p>
-            
             <div class="post-actions">
                 <button class="like-btn" type="button">🔥 <span class="count">0</span></button>
-                <button class="toggle-reply-btn" type="button">接取任务</button>
-                <button class="delete-btn danger" type="button">焚毁告示</button>
+                <button class="toggle-reply-btn" type="button">留言</button>
+                <button class="delete-btn danger hidden" type="button">焚毁告示</button>
             </div>
-
-            <div class="reply-box hidden">
-                <textarea class="reply-input" rows="2" placeholder="留下你的战术或情报..."></textarea>
-                <button class="submit-reply-btn" type="button">刻入留言</button>
-            </div>
-
             <div class="replies-container"></div>
+            <div class="reply-box hidden">
+                <textarea class="reply-input" placeholder="输入留言..."></textarea>
+                <button class="submit-reply-btn">确认</button>
+            </div>
         </article>
     </template>
 
