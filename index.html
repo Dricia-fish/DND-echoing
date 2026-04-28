@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DND小队匿名论坛</title>
+    <title>DND小队匿名论坛 - 冒险者大厅</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
@@ -14,77 +14,84 @@
     </header>
 
     <main class="container">
-
       <section class="card">
-        <h2>发布冒险情报</h2>
+        <h2>发布新动态</h2>
         <form id="post-form">
-          <label for="identity-select">你的匿名身份</label>
-          <select id="identity-select" name="identity"></select>
-          <input id="custom-identity" type="text" maxlength="20" placeholder="输入你的自定义身份名（如：银月游侠）" class="hidden" />
-
-          <label for="post-title">情报标题</label>
-          <input id="post-title" name="title" type="text" maxlength="80" placeholder="例如：龙巢密道已发现" required />
-
-          <label for="post-content">情报正文</label>
-          <textarea id="post-content" name="content" rows="5" maxlength="1000" placeholder="写下你的见闻、战报或委托..." required></textarea>
-          <p class="empty">每次投递卷轴都会自动掷一次 d20 并记录结果。</p>
-
-          <button type="submit">投递卷轴（自动掷 d20）</button>
+          <div class="form-row">
+            <div class="form-group">
+              <label>发布至板块</label>
+              <select id="board-select">
+                <option value="quests">📜 委托悬赏 (Quest Board)</option>
+                <option value="lounge">🍺 酒馆闲聊 (The Lounge)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>你的匿名身份</label>
+              <select id="identity-select"></select>
+            </div>
+          </div>
+          <input id="custom-identity" type="text" placeholder="自定义身份名..." class="hidden" />
+          <input id="post-title" type="text" placeholder="情报标题..." required />
+          <textarea id="post-content" rows="3" placeholder="写下你的见闻..." required></textarea>
+          <button type="submit" class="primary-btn">投递卷轴 (并掷骰)</button>
         </form>
       </section>
 
-      <section class="card">
-        <div class="list-head">
-          <h2>酒馆告示板</h2>
-          <input id="search-input" type="search" placeholder="搜索情报标题或正文..." />
+      <div class="board-controls">
+        <div class="board-tabs">
+          <button class="tab-btn active" data-board="quests">📜 委托板块</button>
+          <button class="tab-btn" data-board="lounge">🍺 聊天板块</button>
         </div>
-
-        <div class="toolbar">
-          <label for="sort-select">排序</label>
+        <div class="sort-group">
+          <label>排序：</label>
           <select id="sort-select">
-            <option value="latest">最新</option>
-            <option value="hot">热门</option>
+            <option value="latest">最新发布</option>
+            <option value="hot">热门推荐</option>
           </select>
         </div>
+      </div>
 
-        <div id="posts-container" class="posts"></div>
+      <div class="main-layout">
+        <section class="posts-section">
+          <div id="posts-container" class="posts"></div>
+          <div class="pager">
+            <button id="prev-page-btn">上一页</button>
+            <span id="page-info">第 1 页</span>
+            <button id="next-page-btn">下一页</button>
+          </div>
+        </section>
 
-        <div class="pager">
-          <button id="prev-page-btn" type="button">上一页</button>
-          <span id="page-info">第 1 页</span>
-          <button id="next-page-btn" type="button">下一页</button>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>今日悬赏热榜</h2>
-        <ol id="daily-ranking" class="ranking-list"></ol>
-      </section>
+        <aside class="sidebar">
+          <section class="card">
+            <h3>🏆 今日悬赏热榜</h3>
+            <ol id="daily-ranking" class="ranking-list"></ol>
+          </section>
+        </aside>
+      </div>
     </main>
 
     <template id="post-template">
-      <article class="post">
+      <article class="post card">
         <div class="post-top">
           <h3 class="post-title"></h3>
           <span class="post-time"></span>
         </div>
         <p class="post-content"></p>
         <div class="post-actions">
-          <button class="like-btn" type="button">🔥 0</button>
-          <button class="toggle-reply-btn" type="button">接取任务</button>
+          <button class="like-btn" type="button">🔥 <span class="count">0</span></button>
+          <button class="toggle-reply-btn" type="button">回复</button>
           <button class="delete-btn danger" type="button">焚毁告示</button>
         </div>
-
+        
+        <div class="replies-container"></div>
+        
         <div class="reply-box hidden">
-          <textarea class="reply-input" rows="3" maxlength="300" placeholder="留下你的战术或情报..."></textarea>
-          <button class="submit-reply-btn" type="button">刻入留言石板</button>
+          <textarea class="reply-input" placeholder="回复也会掷骰..."></textarea>
+          <button class="submit-reply-btn" type="button">留言</button>
         </div>
-
-        <ul class="reply-list"></ul>
       </article>
     </template>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./script.js"></script>
   </body>
 </html>
