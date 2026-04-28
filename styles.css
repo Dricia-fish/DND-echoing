@@ -4,33 +4,68 @@
   --border-color: #6d5638;
   --text-color: #f3e7d3;
   --accent-color: #f6d8a8;
-  --danger: #b13a3a;
+  --primary-gradient: linear-gradient(135deg, #7a3e1d, #a5672b);
+  --danger-gradient: linear-gradient(135deg, #7a1f1f, #b13a3a);
 }
 
 body { margin: 0; background: var(--bg-color); color: var(--text-color); font-family: sans-serif; line-height: 1.6; }
-.header { background: #2f1b12; padding: 40px; text-align: center; border-bottom: 3px solid #c8a46a; }
-.container { width: min(1050px, 95%); margin: 30px auto; }
 
-.main-layout { display: grid; grid-template-columns: 1fr 300px; gap: 30px; }
-.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 24px; border-radius: 12px; margin-bottom: 20px; }
+/* 页眉 */
+.header { background: #2f1b12; padding: 30px; text-align: center; border-bottom: 3px solid #c8a46a; }
 
-/* 控制栏布局 */
+/* 容器布局：修复挤在一块的关键 */
+.container { width: min(1200px, 95%); margin: 30px auto; }
+.main-layout { display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: start; }
+
+/* 卡片与表单 */
+.card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 25px; border-radius: 12px; margin-bottom: 20px; }
+.form-row { display: flex; gap: 20px; margin-bottom: 15px; }
+.form-group { flex: 1; margin-bottom: 15px; }
+label { display: block; margin-bottom: 8px; color: var(--accent-color); font-weight: bold; }
+
+input, textarea, select { 
+  width: 100%; padding: 12px; background: #1a1512; color: #fff; 
+  border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box;
+}
+
+/* 按钮：强制颜色渲染 */
+button { 
+  cursor: pointer; border: none !important; border-radius: 6px; padding: 10px 20px; 
+  font-weight: bold; color: white !important; transition: 0.2s; 
+}
+.primary-btn { background: var(--primary-gradient) !important; }
+.danger { background: var(--danger-gradient) !important; }
+.full-width { width: 100%; margin-top: 10px; }
+button:hover { filter: brightness(1.2); transform: translateY(-1px); }
+
+/* 板块控制 */
 .board-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.sort-group { width: 150px; } /* 限制下拉框宽度，解决图片中的问题 */
-
-.form-row { display: flex; gap: 15px; margin-bottom: 10px; }
-.form-group { flex: 1; }
-input, textarea, select { width: 100%; padding: 10px; background: #1a1512; color: #fff; border: 1px solid var(--border-color); border-radius: 6px; }
-
-.tab-btn { padding: 8px 16px; cursor: pointer; background: #332a24; border: none; color: #aaa; border-radius: 4px; }
+.board-tabs { display: flex; gap: 10px; }
+.tab-btn { background: #332a24; color: #bda07a; min-width: 80px; }
 .tab-btn.active { background: var(--border-color); color: #fff; }
+#sort-select { width: auto; min-width: 130px; }
 
-.post-actions { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-button { cursor: pointer; border-radius: 6px; border: none; padding: 8px 15px; font-weight: bold; }
-.primary-btn { background: #a5672b; color: #fff; width: 100%; }
-.danger { background: var(--danger); color: #fff; display: inline-block !important; } /* 确保删除按钮始终显示 */
+/* 帖子样式 */
+.post-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.post-title { margin: 0; color: var(--accent-color); }
+.post-time { font-size: 0.85em; color: #bda07a; }
+.post-actions { display: flex; gap: 12px; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
 
-.reply-item { background: rgba(0,0,0,0.2); padding: 10px; margin-top: 8px; border-radius: 8px; }
+/* 骰子与回复 */
+.dice-badge { background: #4a3b2a; color: var(--accent-color); padding: 3px 10px; border-radius: 4px; border: 1px solid var(--border-color); font-weight: bold; }
+.dice-badge.mini { font-size: 0.8em; margin-left: 10px; }
+
+.reply-item { 
+  background: rgba(0,0,0,0.3); padding: 12px; margin-top: 10px; border-radius: 8px; 
+  display: flex; justify-content: space-between; align-items: center; border-left: 3px solid var(--border-color);
+}
+.del-reply { padding: 4px 8px; font-size: 0.8em; }
+
 .hidden { display: none !important; }
 
-@media (max-width: 800px) { .main-layout { grid-template-columns: 1fr; } }
+/* 响应式 */
+@media (max-width: 850px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .form-row { flex-direction: column; gap: 10px; }
+  .sidebar { display: none; }
+}

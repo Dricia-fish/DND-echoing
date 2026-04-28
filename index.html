@@ -33,9 +33,13 @@
                             </div>
                         </div>
                         <input id="custom-identity" type="text" placeholder="输入自定义身份名..." class="hidden" />
-                        <input id="post-title" type="text" placeholder="情报标题..." required />
-                        <textarea id="post-content" rows="4" placeholder="写下你的见闻..." required></textarea>
-                        <button type="submit" class="primary-btn">投递卷轴 (掷 d20)</button>
+                        <div class="form-group">
+                            <input id="post-title" type="text" placeholder="情报标题..." required />
+                        </div>
+                        <div class="form-group">
+                            <textarea id="post-content" rows="4" placeholder="写下你的见闻..." required></textarea>
+                        </div>
+                        <button type="submit" class="primary-btn full-width">投递卷轴 (掷 d20)</button>
                     </form>
                 </section>
 
@@ -44,12 +48,10 @@
                         <button class="tab-btn active" data-board="quests">📜 委托</button>
                         <button class="tab-btn" data-board="lounge">🍺 闲聊</button>
                     </div>
-                    <div class="sort-group">
-                        <select id="sort-select">
-                            <option value="latest">最新发布</option>
-                            <option value="hot">热门推荐</option>
-                        </select>
-                    </div>
+                    <select id="sort-select">
+                        <option value="latest">最新发布</option>
+                        <option value="hot">热门推荐</option>
+                    </select>
                 </div>
 
                 <div id="posts-container" class="posts"></div>
@@ -58,7 +60,7 @@
             <aside class="sidebar">
                 <div class="card">
                     <h3>🏆 今日悬赏热榜</h3>
-                    <ol id="daily-ranking"></ol>
+                    <ol id="daily-ranking" class="ranking-list"></ol>
                 </div>
             </aside>
         </div>
@@ -67,19 +69,22 @@
     <template id="post-template">
         <article class="post card">
             <div class="post-top">
-                <h3 class="post-title"></h3>
-                <span class="post-time"></span>
+                <div class="post-info">
+                    <h3 class="post-title"></h3>
+                    <span class="post-time"></span>
+                </div>
+                <div class="dice-display"></div>
             </div>
             <p class="post-content"></p>
             <div class="post-actions">
-                <button class="like-btn" type="button">🔥 <span class="count">0</span></button>
-                <button class="toggle-reply-btn" type="button">留言</button>
-                <button class="delete-btn danger" type="button">焚毁告示</button>
+                <button class="like-btn primary-btn">🔥 <span class="count">0</span></button>
+                <button class="toggle-reply-btn primary-btn">留言</button>
+                <button class="delete-btn danger">焚毁告示</button>
             </div>
             <div class="replies-container"></div>
             <div class="reply-box hidden">
                 <textarea class="reply-input" placeholder="输入留言..."></textarea>
-                <button class="submit-reply-btn">确认</button>
+                <button class="submit-reply-btn primary-btn">确认提交</button>
             </div>
         </article>
     </template>
