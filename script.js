@@ -3,7 +3,6 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 const ROLES = ["匿名游侠", "匿名法师", "匿名牧师", "匿名圣武士", "匿名吟游诗人", "匿名盗贼", "匿名德鲁伊", "匿名术士", "匿名野蛮人", "匿名武僧", "__custom__"];
-
 let currentBoard = 'quests';
 let currentSort = 'latest';
 let currentPage = 1;
@@ -27,13 +26,11 @@ function initControls() {
             refreshPosts();
         };
     });
-
     document.getElementById("sort-select").onchange = (e) => {
         currentSort = e.target.value;
         currentPage = 1;
         refreshPosts();
     };
-
     document.getElementById("prev-page-btn").onclick = () => { if(currentPage > 1) { currentPage--; refreshPosts(); } };
     document.getElementById("next-page-btn").onclick = () => { currentPage++; refreshPosts(); };
 }
@@ -41,7 +38,6 @@ function initControls() {
 async function refreshPosts() {
     const start = (currentPage - 1) * PAGE_SIZE;
     let query = supabaseClient.from("posts").select("*, replies(*)", { count: 'exact' }).eq("board", currentBoard);
-
     if (currentSort === 'hot') query = query.order("likes", { ascending: false });
     else query = query.order("created_at", { ascending: false });
 
@@ -72,7 +68,6 @@ function renderPosts(posts) {
 
         if (post.dice_result) article.querySelector(".post-top").appendChild(createDiceBadge(post.dice_result));
 
-        // 点赞 & 删除
         article.querySelector(".like-btn").onclick = async () => {
             await supabaseClient.from("posts").update({ likes: (post.likes || 0) + 1 }).eq("id", post.id);
             refreshPosts();
@@ -86,7 +81,6 @@ function renderPosts(posts) {
             else refreshPosts();
         };
 
-        // 评论渲染
         const repliesBox = article.querySelector(".replies-container");
         const replyBox = article.querySelector(".reply-box");
         const replyInput = article.querySelector(".reply-input");
@@ -98,18 +92,28 @@ function renderPosts(posts) {
             
             replyEl.innerHTML = `
                 <div class="reply-header">
-                    <strong>${reply.alias}</strong>
-                    <span>${diceHtml} <button class="reply-btn-small">回复TA</button></span>
+                    <strong>${reply.alias} ${diceHtml}</strong>
+                    <div class="reply-actions">
+                        <button class="reply-btn-small js-reply-at">回复TA</button>
+                        <button class="reply-btn-small reply-delete-btn js-reply-del">撤回</button>
+                    </div>
                 </div>
                 <div class="reply-content">${reply.content}</div>
             `;
 
-            // 点击评论里的“回复TA”按钮
-            replyEl.querySelector(".reply-btn-small").onclick = () => {
+            replyEl.querySelector(".js-reply-at").onclick = () => {
                 replyBox.classList.remove("hidden");
                 replyInput.value = `@${reply.alias} `;
                 replyInput.focus();
             };
+
+            replyEl.querySelector(".js-reply-del").onclick = async () => {
+                if (!confirm("确定要撤回这条留言吗？")) return;
+                const { error } = await supabaseClient.from("replies").delete().eq("id", reply.id);
+                if (error) alert("撤回失败：你只能撤回自己的留言。");
+                else refreshPosts();
+            };
+
             repliesBox.appendChild(replyEl);
         });
 
@@ -126,7 +130,13 @@ async function handleReply(postId, content) {
     let alias = document.getElementById("identity-select").value;
     if (alias === "__custom__") alias = document.getElementById("custom-identity").value || "匿名证人";
     
-    await supabaseClient.from("replies").insert({ post_id: postId, content, alias, dice_result: dice });
+    // 获取当前用户 ID
+    const userRes = await supabaseClient.auth.getUser();
+    const owner_id = userRes.data.user?.id;
+
+    await supabaseClient.from("replies").insert({ 
+        post_id: postId, content, alias, dice_result: dice, owner_id: owner_id 
+    });
     refreshPosts();
 }
 
